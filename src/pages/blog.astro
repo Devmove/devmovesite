@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => data.lang === 'pt'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+
+const slugFor = (id: string) => id.replace(/\.md$/, '').replace(/-pt$/, '');
+---
+
+<BaseLayout title="Blog" description="Blog do Devmove: notas e aprendizados.">
+  <p class="eyebrow">Notas de construção</p>
+  <h1>Aprendendo em público.</h1>
+  <p class="lead">Notas curtas, tutoriais e bastidores do que estamos aprendendo enquanto construímos os projetos.</p>
+
+  <section class="section">
+    <div class="grid">
+      {posts.map((post) => (
+        <article class="card">
+          <p class="project-type">{formatDate(post.data.date)}</p>
+          <h2><a href={`${import.meta.env.BASE_URL}blog/${slugFor(post.id)}/`} class="post-link">{post.data.title}</a></h2>
+          <p>{post.data.description}</p>
+          <div class="tags">
+            {post.data.tags.map((tag) => <span>{tag}</span>)}
+          </div>
+          <a class="card-link" href={`${import.meta.env.BASE_URL}blog/${slugFor(post.id)}/`}>Ler post →</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <style>
+    .post-link { color: var(--text); text-decoration: none; }
+    .post-link:hover { color: var(--accent); }
+    h2 { font-size: 1.35rem; }
+  </style>
+</BaseLayout>

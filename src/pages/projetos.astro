@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectExplorer from '../components/ProjectExplorer.astro';
+---
+
+<BaseLayout title="Projetos" description="Veja o que o Devmove está construindo e incubando.">
+  <p class="eyebrow">Feito, mantido e imaginado</p>
+  <h1>Projetos que saem do papel.</h1>
+  <p class="lead">Uma visão rápida das ferramentas que estamos construindo ou incubando. Pequenas, abertas e úteis.</p>
+  <div class="section">
+    <ProjectExplorer lang="pt" showStatus />
+  </div>
+  <p class="note">Novos projetos ganham uma página própria conforme amadurecem.</p>
+</BaseLayout>

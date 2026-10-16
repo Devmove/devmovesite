@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectExplorer from '../../components/ProjectExplorer.astro';
+const base = import.meta.env.BASE_URL;
+---
+<BaseLayout title="Home" description="Devmove — open, useful tools without trackers.">
+  <section class="hero-home"><div><p class="eyebrow">Small projects. Real impact.</p><h1>We build tools that respect you.</h1><p class="lead">Devmove is a group of developers creating great, open tools without trackers — one idea at a time.</p><div class="actions"><a class="btn" href={`${base}en/projects`}>Explore projects <span>→</span></a><a class="btn secondary" href={`${base}en/about`}>About Devmove</a></div></div><div class="rocket" aria-hidden="true"><span>🚀</span><i></i><i></i><i></i></div></section>
+  <section class="section" id="projects"><div class="section-heading"><div><p class="eyebrow">What we are building</p><h2>Explore our projects</h2></div><a href={`${base}en/projects`}>See all →</a></div><ProjectExplorer lang="en" featuredOnly /></section>
+  <section class="section split-section"><div><p class="eyebrow">The people behind it</p><h2>Built in public</h2><p class="lead">Every project is an opportunity to learn, document, and make room for more people to build together.</p><a href={`${base}en/contact`}>Want to join? Get in touch →</a></div><div class="collaborators"><div class="avatar">D</div><div><strong>Devmove</strong><p>Project contributors will appear here as the community grows.</p></div></div></section>
+</BaseLayout>

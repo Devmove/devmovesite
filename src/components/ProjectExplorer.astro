@@ -1,0 +1,117 @@
+---
+import projectsData from '../data/projects.json';
+
+interface Props {
+  lang: 'pt' | 'en';
+  featuredOnly?: boolean;
+  showStatus?: boolean;
+}
+
+const { lang, featuredOnly = false, showStatus = false } = Astro.props;
+
+const projects = (featuredOnly ? projectsData.filter((p) => p.featured) : projectsData);
+const tags = [...new Set(projectsData.flatMap((p) => p.tags))];
+
+const strings = {
+  pt: {
+    searchPlaceholder: 'Buscar por nome ou tag...',
+    searchLabel: 'Buscar projetos',
+    tagsLabel: 'Filtrar por tag',
+    tagsPrefix: 'Tags:',
+    all: 'Todas',
+    empty: 'Nenhum projeto encontrado.',
+    repo: 'Ver repositório ↗',
+    inProgress: 'Em andamento',
+    planned: 'Planejado',
+  },
+  en: {
+    searchPlaceholder: 'Search by name or tag...',
+    searchLabel: 'Search projects',
+    tagsLabel: 'Filter by tag',
+    tagsPrefix: 'Tags:',
+    all: 'All',
+    empty: 'No projects found.',
+    repo: 'View repository ↗',
+    inProgress: 'In progress',
+    planned: 'Planned',
+  },
+}[lang];
+---
+
+<div data-project-explorer>
+  <label class="search">
+    <span aria-hidden="true">⌕</span>
+    <input type="search" placeholder={strings.searchPlaceholder} aria-label={strings.searchLabel} />
+  </label>
+
+  <div class="filter-bar" aria-label={strings.tagsLabel}>
+    <span class="filter-label">{strings.tagsPrefix}</span>
+    <button class="tag-filter" type="button" data-tag="all" aria-pressed="true">{strings.all}</button>
+    {tags.map((tag) => (
+      <button class="tag-filter" type="button" data-tag={tag.toLowerCase()} aria-pressed="false">{tag}</button>
+    ))}
+  </div>
+
+  <div class="grid project-grid">
+    {projects.map((p) => (
+      <article
+        class="card project-card"
+        data-search={`${p.name} ${p.type} ${p.tags.join(' ')}`}
+        data-tags={p.tags.join('|').toLowerCase()}
+      >
+        <div class="project-icon" aria-hidden="true">✦</div>
+        {showStatus ? (
+          <div class="project-meta">
+            <span class:list={p.status === 'in-progress' ? 'status active' : 'status'}>
+              {p.status === 'in-progress' ? strings.inProgress : strings.planned}
+            </span>
+          </div>
+        ) : (
+          <p class="project-type">{p.type}</p>
+        )}
+        <h3>{p.name}</h3>
+        <p>{lang === 'pt' ? p.description.pt : p.description.en}</p>
+        <div class="tags">
+          {p.tags.map((tag) => <span>{tag}</span>)}
+        </div>
+        {p.repo && <a class="card-link" href={p.repo} target="_blank" rel="noreferrer">{strings.repo}</a>}
+      </article>
+    ))}
+  </div>
+
+  <p class="empty" hidden>{strings.empty}</p>
+</div>
+
+<script>
+  document.querySelectorAll('[data-project-explorer]').forEach((root) => {
+    if ((root as HTMLElement).dataset.initialized === 'true') return;
+    (root as HTMLElement).dataset.initialized = 'true';
+
+    const search = root.querySelector<HTMLInputElement>('input[type="search"]');
+    const cards = [...root.querySelectorAll<HTMLElement>('.project-card')];
+    const empty = root.querySelector<HTMLElement>('.empty');
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('.tag-filter')];
+    let selectedTag = 'all';
+
+    const render = () => {
+      const query = search?.value.toLowerCase() ?? '';
+      let visible = 0;
+      cards.forEach((card) => {
+        const textMatch = card.dataset.search?.toLowerCase().includes(query) ?? false;
+        const tagMatch = selectedTag === 'all' || card.dataset.tags?.split('|').includes(selectedTag);
+        card.hidden = !(textMatch && tagMatch);
+        if (!card.hidden) visible++;
+      });
+      if (empty) empty.hidden = visible > 0;
+    };
+
+    search?.addEventListener('input', render);
+    buttons.forEach((button) =>
+      button.addEventListener('click', () => {
+        selectedTag = button.dataset.tag ?? 'all';
+        buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        render();
+      })
+    );
+  });
+</script>

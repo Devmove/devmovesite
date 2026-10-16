@@ -1,0 +1,26 @@
+[
+  {
+    "name": "BrightLocalWP",
+    "type": "Add-on",
+    "status": "in-progress",
+    "description": {
+      "pt": "Add-on para o Local by WP Engine com ferramentas de manutenção e limpeza de ambientes WordPress locais.",
+      "en": "An add-on for Local by WP Engine with maintenance and cleanup tools for local WordPress environments."
+    },
+    "tags": ["WordPress", "Local", "TypeScript"],
+    "repo": "https://github.com/Devmove/BrightLocalWP",
+    "featured": true
+  },
+  {
+    "name": "Companion for Kimai",
+    "type": "Browser extension",
+    "status": "in-progress",
+    "description": {
+      "pt": "Extensão para Chrome e Firefox que aprimora o fluxo de registro de horas no Kimai.",
+      "en": "A Chrome and Firefox extension that enhances the Kimai time-tracking workflow."
+    },
+    "tags": ["Kimai", "Browser extension", "Firefox", "Chrome"],
+    "repo": "https://github.com/mblithium/companion-for-kimai",
+    "featured": true
+  }
+]

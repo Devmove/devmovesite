@@ -1,0 +1,24 @@
+{
+  "language": "English",
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "about": "About",
+    "blog": "Blog",
+    "contact": "Contact"
+  },
+  "common": {
+    "projects": "Projects",
+    "soon": "Coming soon"
+  },
+  "home": {
+    "eyebrow": "Small projects. Real impact.",
+    "title": "We build tools that respect you.",
+    "description": "Devmove is a group of developers creating great, open tools without trackers — one idea at a time.",
+    "projectsIntro": "See what we are building",
+    "projectsTitle": "Explore our projects",
+    "search": "Search by name or tag...",
+    "communityTitle": "Built in public",
+    "communityText": "Every project is an opportunity to learn, document, and make room for more people to build together."
+  }
+}

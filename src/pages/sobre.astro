@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Sobre" description="Conheça o Devmove, sua missão e como participar.">
+  <p class="eyebrow">Por trás do código</p>
+  <h1>Um lugar para construir com calma e abrir o processo.</h1>
+  <p class="lead">O Devmove é uma iniciativa para tirar ideias do papel através de projetos pequenos, abertos e constantes.</p>
+  <section class="section content-narrow"><h2>O que nos move</h2><p>Queremos aprender em público, documentar o processo e facilitar a entrada de novos devs. Não prometemos revoluções: preferimos entregar coisas úteis, explicar como foram feitas e melhorar um pouco a cada ciclo.</p><h2>Como funciona</h2><div class="grid"><div class="card"><h3>Escopo claro</h3><p>Projetos objetivos, com espaço para começar pequeno e crescer com a comunidade.</p></div><div class="card"><h3>Documentação em português</h3><p>Decisões e aprendizados diretos ao ponto, para que mais pessoas possam acompanhar.</p></div><div class="card"><h3>Aberto por padrão</h3><p>Site estático, código público e contribuições bem-vindas no GitHub.</p></div></div><div class="actions"><a class="btn" href={`${base}projetos`}>Ver projetos →</a></div></section>
+</BaseLayout>

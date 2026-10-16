@@ -1,0 +1,14 @@
+{
+  "language": "Português (Brasil)",
+  "nav": {
+    "home": "Início",
+    "projects": "Projetos",
+    "about": "Sobre",
+    "blog": "Blog",
+    "contact": "Contato"
+  },
+  "common": {
+    "projects": "Projetos",
+    "soon": "Em breve"
+  }
+}

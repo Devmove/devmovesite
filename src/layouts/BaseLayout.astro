@@ -1,0 +1,208 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Devmove — ferramentas abertas, úteis e sem rastreadores.' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const path = Astro.url.pathname.replace(base, '').replace(/^\//, '').replace(/\/$/, '');
+const isEnglish = path === 'en' || path.startsWith('en/');
+const currentPath = (isEnglish ? path.replace(/^en\/?/, '') : path) || 'inicio';
+const localeBase = isEnglish ? `${base}en/` : base;
+---
+
+<!doctype html>
+<html lang={isEnglish ? 'en' : 'pt-BR'}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <title>{title} · Devmove</title>
+    <style is:global>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+      :root {
+        --bg: #17151d;
+        --surface: #211f29;
+        --surface-raised: #292632;
+        --surface-hover: #312d3b;
+        --border: #403a4d;
+        --text: #f3eff8;
+        --muted: #b8b0c3;
+        --accent: #c9a8ff;
+        --accent-strong: #9b6dff;
+        --accent-ink: #20132f;
+        --success: #8de0b2;
+        --max-width: 1120px;
+      }
+
+      html { scroll-behavior: smooth; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-width: 320px;
+        color: var(--text);
+        background: var(--bg);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+        line-height: 1.6;
+      }
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(201,168,255,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,255,.055) 1px, transparent 1px);
+        background-size: 42px 42px;
+        mask-image: linear-gradient(to bottom, black, transparent 85%);
+      }
+      body::after {
+        content: '';
+        position: fixed;
+        width: 420px;
+        height: 420px;
+        left: var(--mouse-x, 50%);
+        top: var(--mouse-y, 20%);
+        z-index: -1;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, rgba(155,109,255,.11), transparent 68%);
+        transition: left .18s ease-out, top .18s ease-out;
+      }
+      a { color: var(--accent); }
+      a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+      .container { width: min(100% - 48px, var(--max-width)); margin: 0 auto; }
+      header { border-bottom: 1px solid rgba(64,58,77,.7); background: rgba(23,21,29,.78); backdrop-filter: blur(14px); }
+      nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+      .brand { color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.04em; font-size: 1.15rem; }
+      .brand-mark { display: grid; place-items: center; width: 31px; height: 31px; border-radius: 10px; background: var(--accent); color: var(--accent-ink); font-size: .8rem; }
+      .brand-mark svg { width: 18px; height: 18px; display: block; }
+      .nav-links { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .nav-links a { color: var(--muted); text-decoration: none; padding: 8px 12px; border-radius: 9px; font-size: .9rem; font-weight: 600; }
+      .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--text); background: var(--surface-raised); }
+      .language { margin-left: 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); padding: 7px 9px; font: inherit; font-size: .8rem; }
+      main { min-height: calc(100vh - 160px); padding: clamp(56px, 8vw, 96px) 0 clamp(80px, 11vw, 136px); }
+      .eyebrow { color: var(--accent); text-transform: uppercase; font-size: .74rem; letter-spacing: .12em; font-weight: 800; }
+      h1, h2, h3, p { margin-top: 0; }
+      h1 { max-width: 750px; font-size: clamp(2.25rem, 6vw, 4.8rem); line-height: 1.04; letter-spacing: -.065em; margin: 0 0 24px; }
+      h2 { font-size: clamp(1.55rem, 3vw, 2.2rem); line-height: 1.15; letter-spacing: -.04em; margin-bottom: 14px; }
+      h3 { line-height: 1.25; margin-bottom: 8px; }
+      .lead { color: var(--muted); font-size: clamp(1rem, 2vw, 1.2rem); max-width: 62ch; }
+      .section { margin-top: clamp(72px, 10vw, 128px); }
+      .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin-bottom: 28px; }
+      .section-heading p { color: var(--muted); max-width: 52ch; margin-bottom: 0; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 20px; }
+      .card { min-width: 0; background: rgba(33,31,41,.9); border: 1px solid var(--border); border-radius: 14px; padding: clamp(20px, 3vw, 28px); box-shadow: 0 10px 35px rgba(0,0,0,.12); transition: border-color .2s ease, transform .2s ease, background .2s ease; }
+      .card:hover { border-color: #665484; transform: translateY(-2px); background: rgba(41,38,50,.94); }
+      .card p { color: var(--muted); }
+      .btn { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: var(--accent-ink); border-radius: 9px; padding: 11px 16px; text-decoration: none; font-weight: 700; }
+      .btn:hover { background: #dac4ff; }
+      .btn.secondary { background: var(--surface-raised); color: var(--text); border: 1px solid var(--border); }
+      .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+      .hero-home { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr); gap: clamp(32px, 7vw, 96px); align-items: center; min-height: min(54vh, 540px); }
+      .rocket { display: grid; place-items: center; position: relative; min-height: 300px; font-size: clamp(5rem, 14vw, 9rem); transform: rotate(-12deg); filter: drop-shadow(0 18px 25px rgba(155,109,255,.25)); animation: float 4s ease-in-out infinite; }
+      .rocket::before { content: ''; position: absolute; width: 220px; height: 220px; border: 1px solid rgba(201,168,255,.3); border-radius: 50%; box-shadow: 0 0 60px rgba(155,109,255,.2); }
+      .rocket i { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); top: 15%; right: 10%; box-shadow: -170px 110px 0 var(--accent-strong), 120px 150px 0 var(--accent); }
+      @keyframes float { 50% { transform: translateY(-12px) rotate(-8deg); } }
+      .search { display: flex; align-items: center; gap: 10px; border: 1px solid var(--border); background: var(--surface); border-radius: 10px; padding: 0 16px; width: min(100%, 480px); margin-bottom: 22px; color: var(--muted); }
+      .search input { width: 100%; padding: 13px 0; border: 0; outline: 0; background: transparent; color: var(--text); font: inherit; }
+      .search input::placeholder { color: var(--muted); }
+      .filter-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 24px; }
+      .filter-label { color: var(--muted); font-size: .8rem; margin-right: 4px; }
+      .tag-filter { border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--muted); cursor: pointer; padding: 5px 11px; font: inherit; font-size: .76rem; transition: .2s ease; }
+      .tag-filter:hover, .tag-filter[aria-pressed="true"] { border-color: var(--accent); background: rgba(155,109,255,.18); color: var(--text); }
+      .project-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; background: rgba(155,109,255,.2); color: var(--accent); margin-bottom: 18px; }
+      .project-type { color: var(--accent) !important; font-size: .76rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 5px; }
+      .tags { display: flex; gap: 7px; flex-wrap: wrap; }
+      .tags span { border: 1px solid var(--border); border-radius: 999px; color: var(--muted); font-size: .73rem; padding: 2px 8px; }
+      .empty { color: var(--muted); }
+      .project-meta { margin-bottom: 14px; }
+      .status { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; color: var(--muted); font-size: .73rem; padding: 3px 9px; }
+      .status.active { border-color: rgba(141,224,178,.4); color: var(--success); }
+      .card-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; padding: 9px 14px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface-raised); color: var(--text); text-decoration: none; font-size: .85rem; font-weight: 600; transition: border-color .2s ease, background .2s ease, transform .2s ease; }
+      .card-link:hover { border-color: var(--accent); background: var(--surface-hover); color: var(--text); }
+      .note { color: var(--muted); font-size: .85rem; margin-top: 24px; }
+      .content-narrow { max-width: 850px; }
+      .split-section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, .8fr); align-items: center; gap: clamp(32px, 7vw, 96px); }
+      .collaborators { display: flex; align-items: center; gap: 15px; border: 1px solid var(--border); background: var(--surface); border-radius: 14px; padding: 20px; }
+      .collaborators p { color: var(--muted); margin: 4px 0 0; font-size: .9rem; }
+      .avatar { display: grid; place-items: center; width: 48px; height: 48px; flex: 0 0 48px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-weight: 800; }
+      footer { border-top: 1px solid var(--border); color: var(--muted); padding: 25px 0 32px; font-size: .84rem; }
+      footer .container { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+      footer p { margin: 0; }
+      @media (max-width: 760px) {
+        .container { width: min(100% - 32px, var(--max-width)); }
+        nav { align-items: flex-start; flex-direction: column; gap: 14px; padding: 18px 0; }
+        .nav-links { width: 100%; gap: 2px; }
+        .nav-links a { padding: 7px 8px; font-size: .82rem; }
+        .language { margin-left: 4px; }
+        .hero-home, .split-section { grid-template-columns: 1fr; }
+        .hero-home { min-height: auto; gap: 28px; }
+        .rocket { min-height: 210px; order: -1; }
+        .section-heading { display: block; }
+        .section-heading > a { display: inline-block; margin-top: 14px; }
+        footer .container { display: block; }
+        footer a { display: inline-block; margin-top: 8px; }
+      }
+      @media (max-width: 430px) {
+        .nav-links { display: flex; justify-content: flex-start; }
+        .language { flex: 0 0 auto; }
+        .actions .btn { width: 100%; justify-content: center; }
+        .rocket { transform: scale(.8) rotate(-12deg); margin: -20px 0; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="container" aria-label="Navegação principal">
+        <a class="brand" href={localeBase}><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg></span>Devmove</a>
+        <div class="nav-links">
+          <a href={localeBase} aria-current={currentPath === 'inicio' ? 'page' : undefined}>{isEnglish ? 'Home' : 'Início'}</a>
+          <a href={`${localeBase}${isEnglish ? 'projects' : 'projetos'}`} aria-current={currentPath === (isEnglish ? 'projects' : 'projetos') ? 'page' : undefined}>{isEnglish ? 'Projects' : 'Projetos'}</a>
+          <a href={`${localeBase}${isEnglish ? 'about' : 'sobre'}`} aria-current={currentPath === (isEnglish ? 'about' : 'sobre') ? 'page' : undefined}>{isEnglish ? 'About' : 'Sobre'}</a>
+          <a href={`${localeBase}blog`} aria-current={currentPath === 'blog' ? 'page' : undefined}>Blog</a>
+          <a href={`${localeBase}${isEnglish ? 'contact' : 'contato'}`} aria-current={currentPath === (isEnglish ? 'contact' : 'contato') ? 'page' : undefined}>{isEnglish ? 'Contact' : 'Contato'}</a>
+          <select class="language" data-root={base} data-current={isEnglish ? 'en' : 'pt'} aria-label={isEnglish ? 'Language' : 'Idioma'} title={isEnglish ? 'Language' : 'Idioma'}>
+            <option value="pt">PT-BR</option>
+            <option value="en">EN</option>
+          </select>
+        </div>
+      </nav>
+    </header>
+    <main><div class="container"><slot /></div></main>
+    <footer><div class="container"><p>© {new Date().getFullYear()} Devmove · {isEnglish ? 'Made with Astro.' : 'Feito com Astro.'}</p><a href="https://github.com/Devmove">{isEnglish ? 'Devmove on GitHub' : 'GitHub do Devmove'} ↗</a></div></footer>
+    <script>
+      document.addEventListener('pointermove', (event) => {
+        document.documentElement.style.setProperty('--mouse-x', `${event.clientX}px`);
+        document.documentElement.style.setProperty('--mouse-y', `${event.clientY}px`);
+      });
+      const language = document.querySelector('.language');
+      language?.addEventListener('change', (event) => {
+        const value = (event.target as HTMLSelectElement).value;
+        const current = window.location.pathname;
+        const root = (language as HTMLSelectElement).dataset.root ?? '/';
+        const relative = current.startsWith(root) ? current.slice(root.length).replace(/^\/+|\/+$/g, '') : '';
+        const segments = relative.split('/').filter(Boolean);
+        const englishPages: Record<string, string> = { projetos: 'projects', sobre: 'about', contato: 'contact' };
+        if (value === 'en') {
+          if (segments[0] !== 'en') segments[0] = englishPages[segments[0]] ?? segments[0];
+          const page = segments.slice(1).join('/');
+          window.location.href = `${root}en/${page}`.replace(/\/?$/, '/');
+        } else {
+          if (segments[0] === 'en') segments.shift();
+          const portuguesePages: Record<string, string> = { projects: 'projetos', about: 'sobre', contact: 'contato' };
+          if (segments[0]) segments[0] = portuguesePages[segments[0]] ?? segments[0];
+          window.location.href = `${root}${segments.join('/')}`.replace(/\/?$/, '/');
+        }
+      });
+      const selectedLanguage = document.querySelector<HTMLSelectElement>('.language');
+      if (selectedLanguage) selectedLanguage.value = selectedLanguage.dataset.current ?? 'pt';
+    </script>
+  </body>
+</html>
