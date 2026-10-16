@@ -5,7 +5,7 @@ import { defineConfig } from 'astro/config';
 // Se for Project Pages: https://<usuario-ou-org>.github.io/devmovesite/
 // Se for User/Org Pages (<usuario>.github.io): use site `https://<usuario>.github.io/` e base `'/'`.
 export default defineConfig({
-  site: 'https://devmove.github.io/devmovesite/',
-  base: '/devmovesite/',
+  site: 'https://devmove.dev/',
+  base: '/',
   output: 'static',
 });
